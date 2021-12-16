@@ -1,7 +1,6 @@
 package graphviz
 
 import (
-	"image"
 	"io"
 
 	"github.com/goccy/go-graphviz/cgraph"
@@ -19,23 +18,23 @@ type Graphviz struct {
 type Layout string
 
 const (
-	CIRCO     Layout = "circo"
+	//CIRCO     Layout = "circo"
 	DOT       Layout = "dot"
-	FDP       Layout = "fdp"
-	NEATO     Layout = "neato"
-	OSAGE     Layout = "osage"
-	PATCHWORK Layout = "patchwork"
-	SFDP      Layout = "sfdp"
-	TWOPI     Layout = "twopi"
+	//FDP       Layout = "fdp"
+	//NEATO     Layout = "neato"
+	//OSAGE     Layout = "osage"
+	//PATCHWORK Layout = "patchwork"
+	//SFDP      Layout = "sfdp"
+	//TWOPI     Layout = "twopi"
 )
 
 type Format string
 
 const (
-	XDOT Format = "dot"
+	//XDOT Format = "dot"
 	SVG  Format = "svg"
-	PNG  Format = "png"
-	JPG  Format = "jpg"
+	//PNG  Format = "png"
+	//JPG  Format = "jpg"
 )
 
 func ParseFile(path string) (*cgraph.Graph, error) {
@@ -72,7 +71,7 @@ func (g *Graphviz) SetLayout(layout Layout) *Graphviz {
 }
 
 func (g *Graphviz) SetFontFace(callback func(size float64) (font.Face, error)) {
-	gvc.SetFontFace(callback)
+	panic("not implemented")
 }
 
 func (g *Graphviz) SetRenderer(format Format, renderer gvc.Renderer) {
@@ -93,22 +92,6 @@ func (g *Graphviz) Render(graph *cgraph.Graph, format Format, w io.Writer) (e er
 		return err
 	}
 	return nil
-}
-
-func (g *Graphviz) RenderImage(graph *cgraph.Graph) (img image.Image, e error) {
-	if err := g.ctx.Layout(graph, string(g.layout)); err != nil {
-		return nil, err
-	}
-	defer func() {
-		if err := g.ctx.FreeLayout(graph); err != nil {
-			e = err
-		}
-	}()
-	image, err := g.ctx.RenderImage(graph, string(PNG))
-	if err != nil {
-		return nil, err
-	}
-	return image, nil
 }
 
 func (g *Graphviz) RenderFilename(graph *cgraph.Graph, format Format, path string) (e error) {
